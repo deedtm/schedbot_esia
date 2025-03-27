@@ -1,0 +1,25 @@
+{
+    "databases": {
+        "create": "CREATE DATABASE {condition}{name}",
+        "use": "USE {name}",
+        "get": "SHOW DATABASES",
+        "delete": "DROP DATABASE {name}"
+    },
+    "tables": {
+        "create": "CREATE TABLE {condition}`{name}` (\n{columns}\n)",
+        "get": "SHOW TABLES",
+        "insert": "INSERT INTO {table} ({columns}) VALUES ({values})",
+        "delete": "DROP TABLE {name}",
+        "delete_value": "DELETE FROM {table} WHERE {column} {comp_op} {value}",
+        "update": "UPDATE {table} SET {column}={value}",
+        "update_wh": "UPDATE {table} SET {column}={value} WHERE {wh_columns} {comp_op} {wh_value}",
+        "select": "SELECT {columns} FROM {table}",
+        "select_wh": "SELECT {columns} FROM {table} WHERE {wh_columns} {comp_op} {wh_value}",
+        "columns": {
+            "add": "ALTER TABLE {table} ADD {column} {datatype}",
+            "delete": "ALTER TABLE {table} DROP COLUMN {column}",
+            "rename": "ALTER TABLE {table} RENAME COLUMN {old_name} to {new_name}",
+            "change_datatype": "ALTER TABLE {table} MODIFY COLUMN {column} {datatype}"
+        }
+    }
+}
