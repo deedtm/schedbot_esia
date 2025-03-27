@@ -206,7 +206,7 @@ class SeleniumNetSchool:
 
     async def get_session_data(self, login: str, password: str):
         if self.browser is None or self.browser.stopped:
-            self.browser = await uc.start(headless=True, sandbox=False)
+            self.browser = await uc.start(sandbox=False, browser_args=['--headless=new'])
         try:
             page: uc.Tab = await self.__login_sgo_esia(login, password)
 
