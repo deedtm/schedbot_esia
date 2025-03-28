@@ -75,7 +75,7 @@ async def tomorrow_com(msg: Message, table: str, state: FSMContext, wmsg: Messag
             reply_markup = kb.private_homework_pic if data[1] else kb.private_homework
         else:
             reply_markup = (
-                kb.group_homework_pic if data[1] or data[2] else kb.group_homework
+                kb.group_homework_pic if data[1] else kb.group_homework
             )
 
         await wmsg.edit_text(
@@ -115,6 +115,8 @@ async def day_com(
     (F.data == "forward_hw") | (F.data == "back_hw") | (F.data == "to_homework")
 )
 async def forward(q: CallbackQuery, table: str):
+    
+    
     next = True if q.data == "forward_hw" else False if q.data == "back_hw" else None
     date = get_date_from_text(q.message.text)
     try:

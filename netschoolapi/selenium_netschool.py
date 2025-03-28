@@ -51,7 +51,7 @@ class SeleniumNetSchool:
         await asyncio.sleep(sleep_time)
 
     async def __send_keys(self, text: str, element: uc.Element):
-        timings = [random.random() / 4 for _ in text]
+        timings = [random.random() / 10 for _ in text]
         # print(f"{timings=}")
         for ind, t in enumerate(timings):
             await element.send_keys(text[ind])
