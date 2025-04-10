@@ -96,27 +96,33 @@ async def tomorrow_com(msg: Message, table: str, state: FSMContext, wmsg: Messag
 async def day_com(
     msg: Message, command: CommandObject, table: str, state: FSMContext, wmsg: Message
 ):
-    dt = parse_date(command.args)
-    data = await get_schedules_and_pics(table, dt.date(), msg.chat.id)
-    schedule = data[0]
-    if msg.chat.id > 0:
-        reply_markup = kb.private_homework_pic if data[1] else kb.private_homework
-    else:
-        reply_markup = kb.group_homework_pic if data[1] else kb.group_homework
+    try:
+        dt = parse_date(command.args)
+        data = await get_schedules_and_pics(table, dt.date(), msg.chat.id)
+        schedule = data[0]
+        if msg.chat.id > 0:
+            reply_markup = kb.private_homework_pic if data[1] else kb.private_homework
+        else:
+            reply_markup = kb.group_homework_pic if data[1] else kb.group_homework
 
-    await wmsg.edit_text(
-        text=COMMANDS["schedule"].format(schedule=schedule),
-        disable_web_page_preview=True,
-        reply_markup=reply_markup,
-    )
+        await wmsg.edit_text(
+            text=COMMANDS["schedule"].format(schedule=schedule),
+            disable_web_page_preview=True,
+            reply_markup=reply_markup,
+        )
+    except AttributeError as err:
+        reply_markup = kb.group_homework if msg.chat.id < 0 else kb.private_homework
+        if err.__str__() == "'NoneType' object has no attribute 'day'":
+            await msg.answer(
+                text=ERRS["no_info_for_next_day"].format(date=format_date(dt, True)),
+                reply_markup=reply_markup,
+            )
 
 
 @router.callback_query(
     (F.data == "forward_hw") | (F.data == "back_hw") | (F.data == "to_homework")
 )
 async def forward(q: CallbackQuery, table: str):
-    
-    
     next = True if q.data == "forward_hw" else False if q.data == "back_hw" else None
     date = get_date_from_text(q.message.text)
     try:

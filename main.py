@@ -14,5 +14,5 @@ async def main():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    disable_loggers(('websockets', 'uc.connection'))
+    disable_loggers(('websockets', 'uc.connection', 'nodriver.core'))
     asyncio.run(main())
