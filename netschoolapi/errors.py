@@ -6,6 +6,10 @@ class AuthError(NetSchoolAPIError):
     pass
 
 
+class AuthFailException(NetSchoolAPIError):
+    pass
+
+
 class SchoolNotFoundError(NetSchoolAPIError):
     pass
 

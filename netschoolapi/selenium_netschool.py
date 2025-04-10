@@ -5,13 +5,8 @@ from http.cookiejar import CookieJar
 from typing import Callable, Optional, Coroutine
 from time import time
 
-# from .errors import AuthError
-# from netschoolapi.constants import MAX_SESSION_IDLE_TIME
-
-
-class AuthError(Exception):
-    pass
-MAX_SESSION_IDLE_TIME = 3600
+from .errors import AuthError, AuthFailException
+from .constants import MAX_SESSION_IDLE_TIME
 
 
 def default_captcha_handler(filename: str):
@@ -64,7 +59,9 @@ class SeleniumNetSchool:
                 await self.__sleep(page, 5 * (1 + try_ / 5))
             return await page.select("#login.plain-input"), page
         except NameError as e:
-            if try_ % 3 == 0:
+            if try_ > 8:
+                raise AuthFailException("Couldn't get to esia page")
+            if try_ % 2 == 0:
                 self.browser.stop()
                 self.browser = await uc.start()
                 page = await self.browser.get()
