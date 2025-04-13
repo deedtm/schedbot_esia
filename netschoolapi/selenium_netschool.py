@@ -5,9 +5,10 @@ from http.cookiejar import CookieJar
 from typing import Callable, Optional, Coroutine
 from time import time
 
-from . import logger as l
-from .errors import AuthError, AuthFailException
 from .constants import MAX_SESSION_IDLE_TIME
+from .errors import AuthError, AuthFailException
+from .log import logger as l
+
 
 def default_captcha_handler(filename: str):
     return input(f"Enter code from {filename} or enter 'new' to get new code: ")
@@ -53,7 +54,7 @@ class SeleniumNetSchool:
             await asyncio.sleep(t)
 
     async def __get_to_esia_page(self, page: uc.Tab, try_: int = 1):
-        l.debug(f'Try #{try_} to get to ESIA page')
+        l.debug(f"Try #{try_} to get to ESIA page")
         try:
             if try_ > 1:
                 await self.__sleep(page, 5 * (1 + try_ / 5))
@@ -205,9 +206,11 @@ class SeleniumNetSchool:
 
     async def get_session_data(self, login: str, password: str):
         if self.browser is None or self.browser.stopped:
-            self.browser = await uc.start(sandbox=False, browser_args=['--headless=new'])
+            self.browser = await uc.start(
+                sandbox=False, browser_args=["--headless=new"]
+            )
         try:
-            l.info('Logging in to SGO by ESIA...')
+            l.info("Logging in to SGO by ESIA...")
             page: uc.Tab = await self.__login_sgo_esia(login, password)
 
             self.handler_urls = []
@@ -227,5 +230,3 @@ class SeleniumNetSchool:
             if self.browser is not None:
                 self.browser.stop()
             self.browser = None
-
-    
