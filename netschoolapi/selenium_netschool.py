@@ -54,20 +54,20 @@ class SeleniumNetSchool:
             await asyncio.sleep(t)
 
     async def __get_to_esia_page(self, page: uc.Tab, try_: int = 1):
-        l.debug(f"Try #{try_} to get to ESIA page")
+        l.info(f"Try #{try_} to get to ESIA page")
         try:
             if try_ > 1:
                 await self.__sleep(page, 5 * (1 + try_ / 5))
             return await page.select("#login.plain-input"), page
         except NameError as e:
             if try_ > 8:
-                l.debug("Couldn't get to esia page")
+                l.info("Couldn't get to esia page")
                 raise AuthFailException("Couldn't get to esia page")
             if try_ % 2 == 0:
                 self.browser.stop()
                 self.browser = await uc.start()
                 page = await self.browser.get()
-                l.debug("Started new browser instance")
+                l.info("Started new browser instance")
             page = await page.get(self.netschool_url)
             page = await self.__goto_esia_login()
             return await self.__get_to_esia_page(page, try_ + 1)
