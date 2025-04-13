@@ -21,5 +21,5 @@ if __name__ == "__main__":
                         help='Set the logging level')
     args = parser.parse_args()
     logging.basicConfig(level=getattr(logging, args.log_level))
-    disable_loggers(('websockets', 'uc.connection', 'nodriver.core'))
+    disable_loggers(('websockets.client', 'httpx._client', 'uc.connection', 'nodriver.core'))
     asyncio.run(main())
